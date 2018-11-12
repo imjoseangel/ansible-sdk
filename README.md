@@ -1,2 +1,3 @@
 # ansible-sdk
-Ansible SDK Skel for New Deployments
+
+Run with `cookiecutter <project>`
