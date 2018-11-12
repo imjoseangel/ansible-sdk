@@ -28,6 +28,7 @@ def motd():
 
     print("ANSIBLE STATIC TESTS")
     print("====================")
+    print(" ")
 
     title = "[{{cookiecutter.repo_name}} Tests] "
     asterisks(title)
