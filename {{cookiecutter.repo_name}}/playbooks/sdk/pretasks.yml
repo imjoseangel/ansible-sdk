@@ -1,0 +1,34 @@
+{% raw -%}
+---
+- name: Assert variables
+  assert:
+    that: "{{ item }} is defined"
+    msg: "{{ item }} is not defined"
+  with_items:
+    - env
+
+- name: Set global fact for base dir
+  set_fact:
+    base_dir: "{{ lookup('env','PWD') }}"
+
+- name: Read all variables
+  block:
+    - name: Get stats on all variable files
+      stat:
+        path: "{{ item }}"
+      with_fileglob:
+        - "{{ base_dir }}/vars/{{ env }}/common.yml"
+        - "{{ base_dir }}/vars/{{ env }}/secrets.vault"
+      register: _variables_stat
+
+    - name: Include all variable files (only when found)
+      include_vars: "{{ item.stat.path }}"
+      when: item.stat.exists
+      with_items: "{{ _variables_stat.results }}"
+      no_log: true
+
+  run_once: true
+  delegate_to: localhost
+  become: false
+
+{%- endraw %}

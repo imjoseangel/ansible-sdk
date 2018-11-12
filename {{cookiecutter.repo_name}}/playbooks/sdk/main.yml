@@ -1,0 +1,28 @@
+---
+- name: Ansible SDK
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  pre_tasks:
+
+    - name: Include Pre-Tasks
+      include_tasks: pretasks.yml
+
+  tasks:
+
+    - name: Debug SDK Base Dir
+      debug:
+        var: base_dir
+
+    - name: Debug SDK Common
+      debug:
+        var: common
+
+    - name: Debug SDK Secrets
+      debug:
+        var: secrets
+
+  roles:
+    - role: {{cookiecutter.sdk_role}}
+      sdk_action: create

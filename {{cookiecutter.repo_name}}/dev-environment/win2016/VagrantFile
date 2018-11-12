@@ -1,0 +1,28 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+NUMBER_OF_BOXES_TO_CREATE = 1
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(2) do |config|
+
+  (1..NUMBER_OF_BOXES_TO_CREATE).each do |machineNumber|
+
+    config.vm.define "win2016-0#{machineNumber}" do |machine|
+      machine.vm.box = "mwrock/Windows2016"
+      machine.vm.hostname = "win2016-0#{machineNumber}"
+      machine.vm.network "private_network", ip: "172.16.0.#{30 + machineNumber}"
+
+      machine.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true
+
+      machine.vm.provider "virtualbox" do |vb|
+        vb.gui = true
+        vb.memory = "4096"
+        vb.cpus = 2
+        vb.customize ["modifyvm", :id, "--vram", "32"]
+        vb.customize ['modifyvm', :id, '--clipboard', 'bidirectional']
+        vb.customize ["setextradata", "global", "GUI/SuppressMessages", "all" ]
+      end
+    end
+  end
+end

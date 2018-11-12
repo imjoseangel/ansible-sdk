@@ -1,0 +1,7 @@
+{
+	"project_name": "My Ansible SDK",
+	"repo_name": "myansible_sdk",
+	"sdk_role": "myansiblerole",
+	"project_short_description": "My Ansible Task",
+	"version": "0.0.1"
+}

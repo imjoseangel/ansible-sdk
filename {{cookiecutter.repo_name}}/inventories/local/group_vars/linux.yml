@@ -1,0 +1,6 @@
+---
+ansible_connection: ssh
+ansible_user: vagrant
+ansible_password: vagrant
+ansible_become_pass: vagrant
+ansible_port: 2222

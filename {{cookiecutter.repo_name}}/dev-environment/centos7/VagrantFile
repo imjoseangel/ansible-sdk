@@ -1,0 +1,21 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+NUMBER_OF_BOXES_TO_CREATE = 1
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(2) do |config|
+
+  (1..NUMBER_OF_BOXES_TO_CREATE).each do |machineNumber|
+      config.ssh.insert_key = false
+      config.vm.define "centos7-#{machineNumber}" do |machine|
+      machine.vm.box = "bento/centos-7.5"
+      machine.vm.hostname = "centos7-#{machineNumber}.vagrant.local"
+      machine.vm.network "private_network", ip: "172.16.0.#{40 + machineNumber}"
+
+      machine.vm.provider "virtualbox" do |vb|
+         vb.memory = "2048"
+      end
+    end
+  end
+end

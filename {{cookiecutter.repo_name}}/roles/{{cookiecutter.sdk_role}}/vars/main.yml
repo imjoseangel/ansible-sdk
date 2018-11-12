@@ -1,0 +1,7 @@
+---
+# vars file for {{cookiecutter.sdk_role}}
+sdk_actions:
+  create:
+    - create
+  delete:
+    - delete

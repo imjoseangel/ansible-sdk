@@ -1,0 +1,11 @@
+{% raw -%}
+---
+- name: Validate action items
+  fail:
+    msg: "Action {{ sdk_action }} is not defined"
+  when: sdk_action not in sdk_actions
+
+- name: SDK Configuration
+  include_tasks: "{{ item }}.yml"
+  with_items: "{{ sdk_actions[sdk_action] }}"
+{% endraw -%}
