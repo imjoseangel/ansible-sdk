@@ -25,4 +25,4 @@
 
   roles:
     - role: {{cookiecutter.sdk_role}}
-      sdk_action: create
+      action_sdk: create

@@ -1,11 +1,45 @@
 {% raw -%}
 ---
+- name: Fail if ansible version is lower than "{{ role_ansibleversion }}"
+  fail:
+    msg: "Your Ansible version is {{ ansible_version.full }} and must be greater than {{ role_ansibleversion }}"
+  when: ansible_version.full < role_ansibleversion
+
 - name: Validate action items
   fail:
-    msg: "Action {{ sdk_action }} is not defined"
-  when: sdk_action not in sdk_actions
+    msg: "Action {{ action_sdk }} is not defined"
+  when: action_sdk not in actions_sdk
+  run_once: true
 
-- name: SDK Configuration
-  include_tasks: "{{ item }}.yml"
-  with_items: "{{ sdk_actions[sdk_action] }}"
+- name: Assert main variable is a dictionary
+  assert:
+    that:
+      - sdk is defined
+      - sdk | type_debug == "dict"
+  when: action_sdk not in actions_excluded
+  run_once: true
+
+- name: Collect minimum facts
+  setup:
+    gather_subset:
+      - 'min'
+  when: enable_gather_facts | default(false) | bool and ansible_env is not defined
+
+- name: Assert role variables
+  assert:
+    that:
+      - "{{ action_var }} is defined"
+      - "{{ action_var }} | length > 0"
+    msg: "{{ action_var }} is not defined"
+  loop: "{{ actions_vars[action_sdk] | flatten(levels=1) }}"
+  loop_control:
+    loop_var: action_var
+
+- name: Include action item
+  include_tasks: "{{ actionitem }}.yml"
+  vars:
+    attribute: "{{ actionitem }}"
+  loop: "{{ actions_sdk[action_sdk] | flatten(levels=1) }}"
+  loop_control:
+    loop_var: actionitem
 {% endraw -%}
