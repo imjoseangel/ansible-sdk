@@ -13,10 +13,8 @@ actions_default:
 
 actions_vars:
   create:
-    - "{{ actions_default }}"
     - sdk_mandatory
   delete:
-    - "{{ actions_default }}"
     - sdk_mandatory
 
 actions_excluded:
