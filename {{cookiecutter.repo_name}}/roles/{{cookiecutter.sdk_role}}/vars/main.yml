@@ -12,8 +12,6 @@ actions_default:
   - ansible_env.AZURE_TENANT
 
 actions_vars:
-  create:
-    - sdk_mandatory
   delete:
     - sdk_mandatory
 

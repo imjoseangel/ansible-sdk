@@ -31,6 +31,7 @@
       - "{{ action_var }} is defined"
       - "{{ action_var }} | length > 0"
     msg: "{{ action_var }} is not defined"
+  when: actions_vars[action_sdk] is defined
   loop: "{{ actions_vars[action_sdk] | flatten(levels=1) }}"
   loop_control:
     loop_var: action_var
