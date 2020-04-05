@@ -6,9 +6,10 @@
   when: ansible_version.full < role_ansibleversion
 
 - name: Validate action items
-  fail:
-    msg: "Action {{ action_sdk }} is not defined"
-  when: action_sdk not in actions_sdk
+  assert:
+    that:
+      - action_sdk is defined
+      - action_sdk in actions_sdk
   run_once: true
 
 - name: Assert main variable is a dictionary
