@@ -2,14 +2,16 @@
 ---
 - name: Assert variables
   assert:
-    that: "{{ item }} is defined"
-    msg: "{{ item }} is not defined"
-  with_items:
-    - env
+    that: "{{ extravars }} is defined"
+    msg: "{{ extravars  }} is not defined"
+  loop: "{{ assert_vars | default([]) + ['env'] }}"
+  loop_control:
+    loop_var: extravars
 
 - name: Set global fact for base dir
   set_fact:
     base_dir: "{{ lookup('env','PWD') }}"
+    item_dir: "{{ playbook_dir | basename }}"
 
 - name: Read all variables
   block:
@@ -24,7 +26,9 @@
     - name: Include all variable files (only when found)
       include_vars: "{{ item.stat.path }}"
       when: item.stat.exists
-      with_items: "{{ _variables_stat.results }}"
+      loop: "{{ _variables_stat.results | flatten(levels=1) }}"
+      loop_control:
+        label: "{{ item.stat.path }}"
       no_log: true
 
   run_once: true
